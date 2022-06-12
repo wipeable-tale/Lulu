@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  db:
+    container_name: customer-db
+    build:
+      context: .
+      dockerfile: ./docker/DockerFile
+    ports:
+      - 5432:5432
+    env_file: ./docker/env/.env
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/sql:/docker-entrypoint-initdb.d
