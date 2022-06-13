@@ -1,23 +1,30 @@
 package com.createpro.customerapp.repository
 
 import com.createpro.customerapp.repository.entity.CustomerEntity
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.sql.DriverManager
 
 @Service
 class CustomerRepository {
     @Autowired
     lateinit var dataSource: DataSource
 
-    init {
-        Database.connect(dataSource.url,dataSource.driver,dataSource.user,dataSource.pass)
-    }
-    fun getCustomers() : List<CustomerEntity> {
-        transaction {
-
+    fun getCustomers(): List<CustomerEntity> {
+        var customerEntities :List<CustomerEntity> = listOf()
+        try {
+            customerEntities =DriverManager.getConnection(dataSource.url, dataSource.user, dataSource.pass).use { it ->
+                it.prepareStatement("select * from customer;")
+                    .let { it.executeQuery() }
+                    .let { generateSequence {
+                        if(!it.next())null
+                        else CustomerEntity(it.getString("company_code"))
+                    }.toList() }
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
+        return  customerEntities;
     }
 
 
