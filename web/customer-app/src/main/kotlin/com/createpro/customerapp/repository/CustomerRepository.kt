@@ -16,6 +16,7 @@ class CustomerRepository {
     }
     fun getCustomers() : List<CustomerEntity> {
         transaction {
+
         }
     }
 
