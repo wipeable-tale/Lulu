@@ -15,9 +15,6 @@ class DataSource {
 
     init {
         exectionHooks()
-        println(url)
-        println(user)
-        println(pass)
     }
 
     fun exectionHooks() =
