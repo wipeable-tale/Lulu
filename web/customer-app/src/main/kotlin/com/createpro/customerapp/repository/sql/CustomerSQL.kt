@@ -27,7 +27,9 @@ class CustomerSQL {
                     "    closing_month,\n" +
                     "    net_sales_millions_of_yen,\n" +
                     "    update_date)\n" +
-                    "    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    "    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+                    "    on conflict (kanji_tradeName)" +
+                    "    do nothing; "
     }
 
 }

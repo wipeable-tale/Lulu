@@ -38,8 +38,9 @@ class FileImporterRepository {
                 TYPE.DOUBLE -> NumberToTextConverter.toText(row.getCell(source.pos).numericCellValue)
                 TYPE.STRING ->
                     try {
-                        val value = row.getCell(source.pos)
-                        if (null == value) BLANK else value.stringCellValue
+                        val rawValue = row?.getCell(source.pos)
+                        if (rawValue == null) BLANK
+                        else rawValue.stringCellValue
                     } catch (ie: java.lang.IllegalStateException) {
                         /* 一部例外屋号 */
                         println("---------- エラーが出た企業 ${hm[CustomerSourceEnum.KANJI_TRADE_NAME.toString()]}-------------")

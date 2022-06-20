@@ -5,7 +5,7 @@ create table if not exists customer (
     -- 企業コード
     company_code varchar(10) primary key,
     -- 漢字商号
-    kanji_tradeName varchar(100) not null,
+    kanji_tradeName varchar(100) not null unique,
     -- 検索用カナ商号
     kana_trade_name_for_search varchar(100) not null,
     -- 検索用漢字商号
@@ -50,29 +50,29 @@ create table if not exists customer (
     update_date timestamp
 );
 
-COMMENT ON COLUMN  ON customer.company_code IS '企業コード';
-COMMENT ON COLUMN  ON customer.kanji_tradeName IS '漢字商号';
-COMMENT ON COLUMN  ON customer.kana_trade_name_for_search IS '検索用カナ商号';
-COMMENT ON COLUMN  ON customer.kanji_trade_name_for_search IS '検索用漢字商号';
-COMMENT ON COLUMN  ON customer.company_phone IS '企業電話番号';
-COMMENT ON COLUMN  ON customer.representative_name_in_kanji IS '代表者漢字氏名';
-COMMENT ON COLUMN  ON customer.representatives_kana_name IS '代表者カナ氏名';
-COMMENT ON COLUMN  ON customer.tdbIndustry_classification_name_main_business IS 'ＴＤＢ産業分類名主業';
-COMMENT ON COLUMN  ON customer.ttdb_industry_classification_name_employee IS 'ＴＤＢ産業分類名従業';
-COMMENT ON COLUMN  ON customer.postal_code_number IS '郵便番号';
-COMMENT ON COLUMN  ON customer.company_address_barcode_number IS '企業所在地バーコード番号';
-COMMENT ON COLUMN  ON customer.imperial_address_code IS '帝国住所コード';
-COMMENT ON COLUMN  ON customer.kanji_address IS '漢字所在地';
-COMMENT ON COLUMN  ON customer.capitalthousand_yen IS '資本金(千円)';
-COMMENT ON COLUMN  ON customer.number_of_employees IS '従業員数';
-COMMENT ON COLUMN  ON customer.founding_year IS '創業年';
-COMMENT ON COLUMN  ON customer.founding_month IS '創業月';
-COMMENT ON COLUMN  ON customer.year_established IS '設立年';
-COMMENT ON COLUMN  ON customer.month_of_establishment IS '設立月';
-COMMENT ON COLUMN  ON customer.fiscal_year IS '決算年';
-COMMENT ON COLUMN  ON customer.closing_month IS '決算月';
-COMMENT ON COLUMN  ON customer.net_sales_millions_of_yen IS '売上高(百万円)';
-COMMENT ON COLUMN  ON customer.update_date IS '更新日時';
+COMMENT ON COLUMN  customer.company_code IS '企業コード';
+COMMENT ON COLUMN  customer.kanji_tradeName IS '漢字商号';
+COMMENT ON COLUMN  customer.kana_trade_name_for_search IS '検索用カナ商号';
+COMMENT ON COLUMN  customer.kanji_trade_name_for_search IS '検索用漢字商号';
+COMMENT ON COLUMN  customer.company_phone IS '企業電話番号';
+COMMENT ON COLUMN  customer.representative_name_in_kanji IS '代表者漢字氏名';
+COMMENT ON COLUMN  customer.representatives_kana_name IS '代表者カナ氏名';
+COMMENT ON COLUMN  customer.tdbIndustry_classification_name_main_business IS 'ＴＤＢ産業分類名主業';
+COMMENT ON COLUMN  customer.ttdb_industry_classification_name_employee IS 'ＴＤＢ産業分類名従業';
+COMMENT ON COLUMN  customer.postal_code_number IS '郵便番号';
+COMMENT ON COLUMN  customer.company_address_barcode_number IS '企業所在地バーコード番号';
+COMMENT ON COLUMN  customer.imperial_address_code IS '帝国住所コード';
+COMMENT ON COLUMN  customer.kanji_address IS '漢字所在地';
+COMMENT ON COLUMN  customer.capitalthousand_yen IS '資本金(千円)';
+COMMENT ON COLUMN  customer.number_of_employees IS '従業員数';
+COMMENT ON COLUMN  customer.founding_year IS '創業年';
+COMMENT ON COLUMN  customer.founding_month IS '創業月';
+COMMENT ON COLUMN  customer.year_established IS '設立年';
+COMMENT ON COLUMN  customer.month_of_establishment IS '設立月';
+COMMENT ON COLUMN  customer.fiscal_year IS '決算年';
+COMMENT ON COLUMN  customer.closing_month IS '決算月';
+COMMENT ON COLUMN  customer.net_sales_millions_of_yen IS '売上高(百万円)';
+COMMENT ON COLUMN  customer.update_date IS '更新日時';
 
 
 
