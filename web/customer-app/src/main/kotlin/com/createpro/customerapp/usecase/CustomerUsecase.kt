@@ -7,6 +7,7 @@ import com.createpro.customerapp.model.CustomerSourceEnum
 import com.createpro.customerapp.model.getSource
 import com.createpro.customerapp.service.CustomerService
 import com.createpro.customerapp.service.FileImporterService
+import com.createpro.customerapp.service.WebScraipinService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -19,6 +20,9 @@ class CustomerUsecase {
     @Autowired
     lateinit var fileImporterService: FileImporterService
 
+    @Autowired
+    lateinit var webScripingService: WebScraipinService
+
 
     fun getCustmers(): ResponseCustomersDto = ResponseCustomersDto(customerService.getCustomers().map {
         toCostomerDto(it)
@@ -30,6 +34,10 @@ class CustomerUsecase {
         }.toList().let {
             customerService.upsertAll(it)
         }
+    }
+
+    fun fetchCustomers() {
+        val webSearchCustomers = webScripingService.fetcher()
     }
 
 

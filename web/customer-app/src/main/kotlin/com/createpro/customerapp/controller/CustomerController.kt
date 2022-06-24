@@ -34,4 +34,10 @@ class CustomerController {
         usecase.uploadFiles(file)
         return "index"
     }
+
+    @PostMapping("/fetch")
+    fun fetchCustomers() : String{
+        usecase.fetchCustomers()
+        return "index"
+    }
 }
