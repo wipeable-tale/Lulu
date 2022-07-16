@@ -6,8 +6,8 @@ import com.createpro.customerapp.model.ResponseCustomersDto
 import com.createpro.customerapp.model.CustomerSourceEnum
 import com.createpro.customerapp.model.getSource
 import com.createpro.customerapp.service.CustomerService
-import com.createpro.customerapp.service.FileImporterService
-import com.createpro.customerapp.service.WebScraipinService
+import com.createpro.customerapp.service.xlsx.FileImporterService
+import com.createpro.customerapp.service.web.WebScraipinService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -37,7 +37,7 @@ class CustomerUsecase {
     }
 
     fun fetchCustomers() {
-        val webSearchCustomers = webScripingService.fetcher()
+        val data = webScripingService.fetcher()
     }
 
 

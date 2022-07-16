@@ -10,11 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.nio.charset.Charset
-import java.util.stream.Stream
 
 
 @Controller
@@ -35,8 +30,9 @@ class CustomerController {
         return "index"
     }
 
-    @PostMapping("/fetch")
-    fun fetchCustomers() : String{
+    @GetMapping("/fetch")
+    fun fetchCustomers(): String {
+        println("------fetcher------")
         usecase.fetchCustomers()
         return "index"
     }

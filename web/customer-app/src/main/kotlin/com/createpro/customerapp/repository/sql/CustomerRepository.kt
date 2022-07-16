@@ -1,8 +1,7 @@
-package com.createpro.customerapp.repository
+package com.createpro.customerapp.repository.sql
 
 import com.createpro.customerapp.model.CustomerEntityEnum
 import com.createpro.customerapp.repository.entity.CustomerEntity
-import com.createpro.customerapp.repository.sql.CustomerSQL
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
