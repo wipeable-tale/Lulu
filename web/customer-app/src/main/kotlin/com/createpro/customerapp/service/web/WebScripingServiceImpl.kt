@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service
 class WebScripingServiceImpl : WebScraipinService {
 
     @Autowired
-    lateinit var WebScraipingRepository: WebScraipingRepository
+    lateinit var webScraipingRepository: WebScraipingRepository
 
 
     override fun fetcher(): Unit {
 
-        WebScraipingRepository.fetch()
+        val (count, fumaSources) = webScraipingRepository.fetch("")
 
     }
 }

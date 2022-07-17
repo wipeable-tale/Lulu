@@ -1,48 +1,95 @@
 package com.createpro.customerapp.repository.jsoup
 
+import com.createpro.customerapp.model.FUMA
+import com.createpro.customerapp.model.FUMA_ITEM_NAME
+import com.createpro.customerapp.model.FUMA_ITEM_NAME.*
+import com.createpro.customerapp.model.FUMA_TAGS.*
 import com.createpro.customerapp.model.FumaSource
-import com.createpro.customerapp.model.WebSource
 import org.jsoup.Jsoup
-import org.jsoup.select.Elements
+import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
+
 
 @Service
 class WebScraipingRepository {
 
-    fun fetch(): List<FumaSource> {
 
-        val doc = Jsoup.connect(WebSource.FUMA.url).get()
-        val div = doc.getElementById("contents_main_box2")
-        val compayList = div?.getElementsByClass("s_box")
+    fun fetch(page: String): Pair<Int, List<FumaSource>> {
+        val url = "${FUMA.URL.value}${page}"
+        val doc = Jsoup.connect(url).get()
 
-        return compayList?.let { setFumaSource(it) }.orEmpty()
+        val allCount = Integer.parseInt(doc.getElementById("js-data_count")?.text().orEmpty())
 
+        val conntents = doc.getElementById(FUMA.CONTENTS.value)
+        val compayElementList = conntents?.getElementsByClass(FUMA.COMPPANY_ELEMENTS.value).orEmpty()
+        val data = compayElementList.map { it.toFumaSource() }
+
+        return Pair(allCount, data)
     }
 
-    private fun setFumaSource(companyList: Elements): List<FumaSource> {
-        val dataList = arrayListOf<FumaSource>()
+    private fun Element.toFumaSource(): FumaSource {
 
-        for (company in companyList) {
-            val companyName =
-                company.getElementsByClass("s_res s_coprate").first()?.getElementsByTag("a")?.text()
-            val industry =
-                company.getElementsByClass("s_title s_bottom clearfix")
-                    .first()?.getElementsByClass("s_res s_listed_03")?.first()?.getElementsByTag("a")?.text()
+        val companyName = getCompanyNamme()
+        val mainIndustry = getMainIndustry()
+        val subIndustry = getSubIndustry()
+        val address = getAddress()
+
+        val companyInfos = getCompanyInfo()
+        val representive = getItem(companyInfos, REPRESENTIVE).replaceValue(REPRESENTIVE)
+        val foundation = getItem(companyInfos, FOUNDATION).replaceValue(FOUNDATION)
+        val establishDate = getItem(companyInfos, ESTABLISH_DATE).replaceValue(ESTABLISH_DATE)
+        val numberOfEmployee = getItem(companyInfos, NUMBER_OF_EMPLOYEE).replaceValue(NUMBER_OF_EMPLOYEE)
+
+//        test(companyName, mainIndustry, subIndustry, address, representive, foundation, establishDate, numberOfEmployee)
+        return FumaSource(
+            companyName,
+            mainIndustry,
+            subIndustry,
+            address,
+            representive,
+            foundation,
+            establishDate,
+            numberOfEmployee
+        )
+    }
+
+    private fun test(a: String, b: String, c: String, d: String, e: String, f: String, g: String, h: String) {
+        println(a)
+        println(b)
+        println(c)
+        println(d)
+        println(e)
+        println(f)
+        println(g)
+        println(h)
+    }
 
 
-            dataList.add(FumaSource(companyName, industry))
+    private fun Element.getCompanyNamme(): String =
+        getElementsByClass(COMPANY.anncestor).first()?.getElementsByTag("a")?.text().orEmpty()
 
+    private fun Element.getMainIndustry(): String =
+        getElementsByClass(MAIN_INDUSTRY.anncestor)
+            .first()?.getElementsByClass(MAIN_INDUSTRY.parent)?.get(MAIN_INDUSTRY.index)
+            ?.getElementsByTag(MAIN_INDUSTRY.child)?.text().orEmpty()
+
+    private fun Element.getSubIndustry(): String = getElementsByClass(SUB_INDUSTRY.anncestor)
+        .first()?.getElementsByClass(SUB_INDUSTRY.parent)?.get(SUB_INDUSTRY.index)
+        ?.getElementsByTag(SUB_INDUSTRY.child)?.text().orEmpty()
+
+    private fun Element.getAddress(): String = getElementsByClass(ADDRESS.anncestor).text()
+
+    private fun Element.getCompanyInfo(): List<Element> =
+        getElementsByClass(COMPANY_INFO.anncestor).first()?.getElementsByTag(COMPANY_INFO.parent)
+            .orEmpty()
+
+    private fun getItem(companyInfos: List<Element>, target: FUMA_ITEM_NAME): String {
+        for (element in companyInfos) {
+            val value = element.text()
+            if (value.contains(target.value)) return value else ""
         }
-        return dataList
-    }
-
-
-    private fun getCompanyNamme(): String {
         return ""
     }
 
-    private fun getIndustry(): String {
-        return ""
-    }
-
+    private fun String.replaceValue(itemName: FUMA_ITEM_NAME): String = replace(itemName.value, "")
 }
