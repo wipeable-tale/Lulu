@@ -8,7 +8,8 @@ enum class FUMA(val value: String) {
 }
 
 enum class FUMA_TAGS(val anncestor: String, val parent: String, val child: String, val index: Int = 99) {
-    COMPANY("s_res s_coprate", "", ""),
+    COUNT("js-data_count", "", ""),
+    COMPANY("s_res s_coprate", "a", ""),
     MAIN_INDUSTRY("s_title s_bottom clearfix", "s_res s_listed_03", "a", 0),
     SUB_INDUSTRY("s_title s_bottom clearfix", "s_res s_listed_03", "a", 1),
     ADDRESS("s_res s_bottom", "", ""),

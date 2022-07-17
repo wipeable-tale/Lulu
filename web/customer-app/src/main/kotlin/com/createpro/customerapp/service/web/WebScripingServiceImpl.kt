@@ -12,8 +12,6 @@ class WebScripingServiceImpl : WebScraipinService {
 
 
     override fun fetcher(): Unit {
-
         val (count, fumaSources) = webScraipingRepository.fetch("")
-
     }
 }

@@ -3,6 +3,7 @@ package com.createpro.customerapp.repository.jsoup
 import com.createpro.customerapp.model.FUMA
 import com.createpro.customerapp.model.FUMA_ITEM_NAME
 import com.createpro.customerapp.model.FUMA_ITEM_NAME.*
+import com.createpro.customerapp.model.FUMA_TAGS
 import com.createpro.customerapp.model.FUMA_TAGS.*
 import com.createpro.customerapp.model.FumaSource
 import org.jsoup.Jsoup
@@ -13,12 +14,11 @@ import org.springframework.stereotype.Service
 @Service
 class WebScraipingRepository {
 
-
     fun fetch(page: String): Pair<Int, List<FumaSource>> {
         val url = "${FUMA.URL.value}${page}"
         val doc = Jsoup.connect(url).get()
 
-        val allCount = Integer.parseInt(doc.getElementById("js-data_count")?.text().orEmpty())
+        val allCount = Integer.parseInt(doc.getElementById(COUNT.anncestor)?.text().orEmpty())
 
         val conntents = doc.getElementById(FUMA.CONTENTS.value)
         val compayElementList = conntents?.getElementsByClass(FUMA.COMPPANY_ELEMENTS.value).orEmpty()
@@ -30,8 +30,8 @@ class WebScraipingRepository {
     private fun Element.toFumaSource(): FumaSource {
 
         val companyName = getCompanyNamme()
-        val mainIndustry = getMainIndustry()
-        val subIndustry = getSubIndustry()
+        val mainIndustry = getIndustry(MAIN_INDUSTRY)
+        val subIndustry = getIndustry(SUB_INDUSTRY)
         val address = getAddress()
 
         val companyInfos = getCompanyInfo()
@@ -64,18 +64,12 @@ class WebScraipingRepository {
         println(h)
     }
 
-
     private fun Element.getCompanyNamme(): String =
-        getElementsByClass(COMPANY.anncestor).first()?.getElementsByTag("a")?.text().orEmpty()
+        getElementsByClass(COMPANY.anncestor).first()?.getElementsByTag(COMPANY.parent)?.text().orEmpty()
 
-    private fun Element.getMainIndustry(): String =
-        getElementsByClass(MAIN_INDUSTRY.anncestor)
-            .first()?.getElementsByClass(MAIN_INDUSTRY.parent)?.get(MAIN_INDUSTRY.index)
-            ?.getElementsByTag(MAIN_INDUSTRY.child)?.text().orEmpty()
-
-    private fun Element.getSubIndustry(): String = getElementsByClass(SUB_INDUSTRY.anncestor)
-        .first()?.getElementsByClass(SUB_INDUSTRY.parent)?.get(SUB_INDUSTRY.index)
-        ?.getElementsByTag(SUB_INDUSTRY.child)?.text().orEmpty()
+    private fun Element.getIndustry(target: FUMA_TAGS): String = getElementsByClass(target.anncestor)
+        .first()?.getElementsByClass(target.parent)?.get(target.index)
+        ?.getElementsByTag(target.child)?.text().orEmpty()
 
     private fun Element.getAddress(): String = getElementsByClass(ADDRESS.anncestor).text()
 
