@@ -1,19 +1,21 @@
 package com.createpro.customerapp.controller
 
-import com.createpro.customerapp.usecase.FumaCustomerUsecase
+import com.createpro.customerapp.usecase.BaseconnectCustomerUsecase
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class FumaCustomerController {
+class BaseconnectCustomerController {
     @Autowired
-    lateinit var usecase: FumaCustomerUsecase
+    lateinit var usecase: BaseconnectCustomerUsecase
 
-    @GetMapping("/fuma/fetch")
+    @GetMapping("/baseconnect/fetch")
     fun fetch(): String {
-        println("------fuma fetcher------")
+        println("------baseconnect fetcher------")
         usecase.fetcher()
+
         return "index"
+
     }
 }

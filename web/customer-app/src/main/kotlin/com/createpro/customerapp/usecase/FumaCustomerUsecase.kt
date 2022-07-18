@@ -7,18 +7,18 @@ import org.springframework.stereotype.Service
 @Service
 class FumaCustomerUsecase {
     @Autowired
-    lateinit var fumaCustomerService: FumaCustomerService
+    lateinit var service: FumaCustomerService
 
 
-    fun fetchCustomers() {
-        val count = fumaCustomerService.fetchAllCount()
+    fun fetcher() {
+        val count = service.fetchAllCount()
         val pages = toQuery(count)
 
         for (page in pages) {
             Thread.sleep(3000)
-            fumaCustomerService.fetchData(page).let {
+            service.fetchData(page).let {
                 println("**********UPSERT****************")
-                fumaCustomerService.upsertAll(it)
+                service.upsertAll(it)
             }
         }
 
