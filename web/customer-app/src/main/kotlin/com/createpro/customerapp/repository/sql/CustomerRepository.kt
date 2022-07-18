@@ -83,7 +83,10 @@ class CustomerRepository {
                             CustomerEntityEnum.NET_SALES_MILLIONS_OF_YEN.index,
                             BigDecimal(Integer.parseInt(entity.netSalesMillionsOfYen))
                         )
-                        it.setTimestamp(CustomerEntityEnum.UPDATE_DATE.index, Timestamp(System.currentTimeMillis()))
+                        it.setTimestamp(
+                            CustomerEntityEnum.UPDATE_DATE.index,
+                            Timestamp(System.currentTimeMillis())
+                        )
                         it.executeUpdate()
                     }
                 }

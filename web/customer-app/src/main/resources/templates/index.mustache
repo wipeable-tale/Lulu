@@ -1,11 +1,16 @@
 <html>
 <head>
-  <title>顧客リストアップロード</title>
+    <title>顧客リストアップロード</title>
 </head>
 <body>
 <form method="POST" enctype="multipart/form-data" action="/upload">
-    <input type="file" name="upload_file"　accept=".xlsx,.csv,.txt">
+    <input type="file" name="upload_file" 　accept=".xlsx,.csv,.txt">
     <button type="submit">ファイルをアップロード</button>
 </form>
+<br>
+<form method="GET" action="/fetch">
+    <button type="submit">FUMA登録</button>
+</form>
+
 </body>
 </html>

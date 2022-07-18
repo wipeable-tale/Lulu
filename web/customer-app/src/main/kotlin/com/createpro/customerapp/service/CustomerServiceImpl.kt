@@ -1,8 +1,8 @@
 package com.createpro.customerapp.service
 
 import com.createpro.customerapp.domain.Customer
-import com.createpro.customerapp.repository.sql.CustomerRepository
 import com.createpro.customerapp.repository.entity.CustomerEntity
+import com.createpro.customerapp.repository.sql.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -15,13 +15,12 @@ class CustomerServiceImpl : CustomerService {
         toCustomer(it)
     };
 
-    override fun upsertAll(customers: List<Customer>) {
+    override fun upsertAll(customers: List<Customer>) =
         customers.map {
             toCustomerEntity(it)
         }.let {
             customerRepository.upsert(it)
         }
-    }
 
 
     private fun toCustomer(customerEntity: CustomerEntity): Customer =

@@ -2,12 +2,11 @@ package com.createpro.customerapp.usecase
 
 import com.createpro.customerapp.domain.Customer
 import com.createpro.customerapp.model.CustomerDto
-import com.createpro.customerapp.model.ResponseCustomersDto
 import com.createpro.customerapp.model.CustomerSourceEnum
+import com.createpro.customerapp.model.ResponseCustomersDto
 import com.createpro.customerapp.model.getSource
 import com.createpro.customerapp.service.CustomerService
 import com.createpro.customerapp.service.xlsx.FileImporterService
-import com.createpro.customerapp.service.web.WebScraipinService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -19,9 +18,6 @@ class CustomerUsecase {
 
     @Autowired
     lateinit var fileImporterService: FileImporterService
-
-    @Autowired
-    lateinit var webScripingService: WebScraipinService
 
 
     fun getCustmers(): ResponseCustomersDto = ResponseCustomersDto(customerService.getCustomers().map {
@@ -36,11 +32,7 @@ class CustomerUsecase {
         }
     }
 
-    fun fetchCustomers() {
-        val data = webScripingService.fetcher()
-    }
-
-
+    
     private fun toCostomerDto(customer: Customer): CustomerDto =
         CustomerDto(
             customer.companyCode,
