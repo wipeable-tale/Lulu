@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class FumaCustomerUsecase {
+    companion object {
+        const val SLEEP_TIME: Long = 10000
+        const val PAGE_COUNT = 50
+    }
+
     @Autowired
     lateinit var service: FumaCustomerService
 
@@ -15,28 +20,28 @@ class FumaCustomerUsecase {
         val pages = toQuery(count)
 
         for (page in pages) {
-            Thread.sleep(3000)
+            println("**********fetcher(URL:${page})****************")
+            Thread.sleep(SLEEP_TIME)
             service.fetchData(page).let {
                 println("**********UPSERT****************")
                 service.upsertAll(it)
             }
         }
-
-//        /* 1件のみテスト */
-//        fumaCustomerService.fetchData("").let {
-//            println("**********UPSERT****************")
-//            fumaCustomerService.upsertAll(it)
-//        }
     }
 
     private fun toQuery(count: Int): List<String> {
-        val allPages = if (0 == count % 50) count / 50 else count / 50 + 1
+        val allPages = if (0 == count % PAGE_COUNT) count / PAGE_COUNT else count / PAGE_COUNT + 1
 
         val queries = arrayListOf<String>()
         (0..allPages).forEach {
             var query = ""
-            if (0 == it) else query = "&num=${it * 50}"
-            queries.add(query)
+            /* for reccovery */
+            if (121 <= it) query = "&num=${it * PAGE_COUNT}"
+            /* original */
+//            if (1 < it) query = "&num=${it * PAGE_COUNT}"
+
+            if (!query.isEmpty()) queries.add(query)
+
         }
         return queries
     }

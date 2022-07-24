@@ -1,6 +1,7 @@
 package com.createpro.customerapp.repository.jsoup
 
 import com.createpro.customerapp.model.BASECONNECT
+import com.createpro.customerapp.model.BaseconnectSource
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import org.springframework.stereotype.Service
@@ -18,16 +19,16 @@ class BaseconnectWebRepository {
         return Integer.parseInt(count)
     }
 
-    fun fetchCompanyDetail(): Unit {
-        val doc = Jsoup.connect(BASECONNECT.URL.value).get()
+    fun fetchCompanyDetail(page: String): List<BaseconnectSource> {
+        val doc = Jsoup.connect("${BASECONNECT.URL.value}${page}").get()
+        println("***********${BASECONNECT.URL.value}${page}*******************")
         val companyElements = doc.getElementsByClass("searches__result__list")
-        //テスト用
-//        val element = companyElements.first()!!
 
+        var sources = arrayListOf<BaseconnectSource>()
         for (element in companyElements) {
             val category =
-                element.getElementsByClass("searches__tag searches__tag--listed")?.first()?.getElementsByTag("a")
-                    ?.text()
+                element.getElementsByClass("searches__tag searches__tag--listed")!!.first()!!.getElementsByTag("a")
+                    .text()
             val detailUri =
                 element.getElementsByClass("searches__result__list__header__title").first()?.getElementsByTag("a")
                     ?.first()?.attr("href").orEmpty()
@@ -45,20 +46,31 @@ class BaseconnectWebRepository {
             val newHired = fetchItem(companyBaseInfo, "新卒採用人数")
             val officesNumber = fetchItem(companyBaseInfo, "事業所数")
 
-            println("-------")
-            println(companyName)
-            println(category)
-            println(establish)
-            println(foundation)
-            println(benefit)
-            println(numberOfEmployee)
-            println(newHired)
-            println(officesNumber)
+            val site = detailDoc.getElementsByClass("node__box node__contact")!!.first()
+                ?.getElementsByClass("node__box__heading__link node__box__heading__link-othersite")?.first()
+                ?.getElementsByTag("a")?.first()?.attr("href").orEmpty()
 
 
+            val contactInfo =
+                detailDoc.getElementsByClass("nodeTable--simple nodeTable--simple__oneColumn cf")!!.first()!!
+                    .getElementsByTag("dl")
+            val address = fetchItem(contactInfo, "住所")
+
+            val source = BaseconnectSource(
+                companyName = companyName,
+                category = category,
+                establish = establish,
+                foundation = foundation,
+                benefit = benefit,
+                numberOfEmployee = numberOfEmployee,
+                newHired = newHired,
+                officesNumber = officesNumber,
+                site = site,
+                address = address
+            )
+            sources.add(source)
         }
-
-
+        return sources
     }
 
     private fun String.replace(): String {
@@ -76,7 +88,7 @@ class BaseconnectWebRepository {
         var value = ""
         for (base in baseInfos) {
             val key = base.getElementsByTag("dt").text()
-            if (key == target)
+            if (key.contains(target))
                 when (key) {
                     "設立年月" -> {
                         value = base.getElementsByTag("dd").text()
@@ -94,6 +106,9 @@ class BaseconnectWebRepository {
                         value = base.getElementsByTag("dd").text()
                     }
                     "事業所数" -> {
+                        value = base.getElementsByTag("dd").text()
+                    }
+                    "住所" -> {
                         value = base.getElementsByTag("dd").text()
                     }
                 }
