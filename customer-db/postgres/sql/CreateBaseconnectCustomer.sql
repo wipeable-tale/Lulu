@@ -20,9 +20,9 @@ create table if not exists baseconnect_customer (
     -- 事業所数
     offices_number varchar(16) not null,
     -- サイト
-    site varchar(128) not null,
+    site varchar(256) not null,
     -- 住所
-    address varchar(128) not null,
+    address varchar(256) not null,
     -- 更新日時
     update_date timestamp
 );

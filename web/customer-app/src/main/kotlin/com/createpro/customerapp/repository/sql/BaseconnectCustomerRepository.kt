@@ -35,8 +35,10 @@ class BaseconnectCustomerRepository {
 
                         it.setString(13, entity.foundation)
                         it.setInt(14, entity.numberOfEmployee)
-                        it.setTimestamp(15, entity.updateDate)
+                        it.setString(15, entity.site)
+                        it.setTimestamp(16, entity.updateDate)
 
+                        println(it.toString())
                         it.executeUpdate()
                     }
                 }

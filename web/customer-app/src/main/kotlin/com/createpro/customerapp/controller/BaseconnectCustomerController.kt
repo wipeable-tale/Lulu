@@ -16,6 +16,5 @@ class BaseconnectCustomerController {
         usecase.fetcher()
 
         return "index"
-
     }
 }

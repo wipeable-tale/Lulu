@@ -3,6 +3,7 @@ package com.createpro.customerapp.repository.jsoup
 import com.createpro.customerapp.model.BASECONNECT
 import com.createpro.customerapp.model.BaseconnectSource
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.springframework.stereotype.Service
 
@@ -12,7 +13,7 @@ class BaseconnectWebRepository {
 
 
     fun fetchCount(): Int {
-        val doc = Jsoup.connect(BASECONNECT.URL.value).get()
+        val doc = BASECONNECT.URL.value.getDocument()
         val countInfo = doc.getElementsByClass(BASECONNECT.COUNTS.value)?.text()
         val count = countInfo.replace()
 
@@ -20,7 +21,7 @@ class BaseconnectWebRepository {
     }
 
     fun fetchCompanyDetail(page: String): List<BaseconnectSource> {
-        val doc = Jsoup.connect("${BASECONNECT.URL.value}${page}").get()
+        val doc = "${BASECONNECT.URL.value}${page}".getDocument()
         println("***********${BASECONNECT.URL.value}${page}*******************")
         val companyElements = doc.getElementsByClass("searches__result__list")
 
@@ -71,6 +72,19 @@ class BaseconnectWebRepository {
             sources.add(source)
         }
         return sources
+    }
+
+
+    fun String.getDocument(): Document {
+        val doc =
+            try {
+                Jsoup.connect(this).get()
+            } catch (ex: Exception) {
+                Thread.sleep(10000)
+                getDocument()
+            }
+
+        return doc
     }
 
     private fun String.replace(): String {

@@ -9,6 +9,7 @@ class BaseconnectCustomerUsecase {
     companion object {
         const val MAX_PAGE_COUNT = 200
         const val PAGE_COUNT = 50
+        const val SLEEP_TIME: Long = 20000
     }
 
     @Autowired
@@ -21,12 +22,18 @@ class BaseconnectCustomerUsecase {
 
         for (page in pages) {
             println("*******${page}の処理***********")
+            Thread.sleep(SLEEP_TIME)
             val data = service.fetchDetail(page)
-            println("*******upsert***********")
             service.upsert(data)
 
         }
+    }
 
+    fun fetcher(query: String) {
+        val queryInt = Integer.parseInt(query).toPage()
+
+        val data = service.fetchDetail(queryInt)
+        service.upsert(data)
     }
 
     private fun toUri(count: Int): List<String> {
@@ -37,9 +44,10 @@ class BaseconnectCustomerUsecase {
             var query = ""
             if (0 < it) query = "?page=${it}"
 
-            if (it in 0..MAX_PAGE_COUNT) result.add(query)
+            if (it in 50..MAX_PAGE_COUNT) result.add(query)
         }
         return result
     }
 
+    private fun Int.toPage() = "?page=${this}"
 }
